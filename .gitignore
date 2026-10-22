@@ -18,3 +18,6 @@ secrets/
 .vercel
 dist/
 .cache/
+
+# 本地生成的 Word 汇报与总结文档（仅本地保留，不推送到 GitHub）
+*.docx

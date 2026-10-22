@@ -11,6 +11,17 @@ import { getPayToAddress } from '../src/config/wallet.js';
 const app = express();
 app.use(express.json());
 
+// 兼容 Vercel rewrite：如果 Vercel 将请求路径重写到了 /api/index.js，从 x-matched-path 还原原始路由
+app.use((req, res, next) => {
+  const matchedPath = req.headers['x-matched-path'];
+  if (matchedPath && req.url.startsWith('/api/index.js')) {
+    const queryIdx = req.url.indexOf('?');
+    const query = queryIdx !== -1 ? req.url.slice(queryIdx) : '';
+    req.url = matchedPath + query;
+  }
+  next();
+});
+
 // 基础网络与合约配置（Base Sepolia 测试网）
 export const NETWORK = 'eip155:84532';
 export const USDC_ASSET = '0x036CbD53842c5426634e7929541eC2318f3dCF7e';

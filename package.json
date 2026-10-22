@@ -1,0 +1,22 @@
+{
+  "name": "x402-weather-service",
+  "version": "1.0.0",
+  "description": "x402 Paid Weather API Service on Base Sepolia",
+  "main": "api/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "client": "node scripts/client.js",
+    "reconcile": "node scripts/reconcile.js"
+  },
+  "dependencies": {
+    "@x402/core": "^2.0.0",
+    "@x402/evm": "^2.0.0",
+    "@x402/express": "^2.0.0",
+    "@x402/fetch": "^2.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "viem": "^2.23.0"
+  }
+}

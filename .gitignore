@@ -1,0 +1,16 @@
+# 依赖目录
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境变量与私密密钥文件夹（严格禁止提交与上传）
+.env
+.env.*
+!.env.example
+secrets/
+
+# Vercel 部署临时构建产物
+.vercel
+dist/
+.cache/

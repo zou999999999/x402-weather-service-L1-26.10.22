@@ -17,8 +17,8 @@ export const USDC_ASSET = '0x036CbD53842c5426634e7929541eC2318f3dCF7e';
 export const PRICE_USD = '$0.001';
 export const FACILITATOR_URL = 'https://x402.org/facilitator';
 
-// 读取收款地址 (优先环境变量 PAY_TO，其次 secrets/wallet.json)
-const payTo = getPayToAddress() || '0x0000000000000000000000000000000000000000';
+// 读取收款地址 (优先环境变量 PAY_TO，其次 secrets/wallet.json，兜底为配置好的收款钱包)
+const payTo = getPayToAddress() || '0xdcD7DAFafb0EF3d50bDdB480Dbd503Fa6D1B6C09';
 
 // 配置 x402 资源服务器与 Base Sepolia EVM 方案
 const facilitatorClient = new HTTPFacilitatorClient({ url: FACILITATOR_URL });

@@ -11,13 +11,13 @@ import { getPayToAddress } from '../src/config/wallet.js';
 const app = express();
 app.use(express.json());
 
-// 兼容 Vercel rewrite：如果 Vercel 将请求路径重写到了 /api/index.js，从 x-matched-path 还原原始路由
+// 兼容 Vercel rewrite：从 __path 还原原始路由与 query 参数
 app.use((req, res, next) => {
-  const matchedPath = req.headers['x-matched-path'];
-  if (matchedPath && req.url.startsWith('/api/index.js')) {
-    const queryIdx = req.url.indexOf('?');
-    const query = queryIdx !== -1 ? req.url.slice(queryIdx) : '';
-    req.url = matchedPath + query;
+  if (req.query && req.query.__path) {
+    const originalPath = req.query.__path;
+    delete req.query.__path;
+    const remainingQuery = new URLSearchParams(req.query).toString();
+    req.url = originalPath + (remainingQuery ? `?${remainingQuery}` : '');
   }
   next();
 });

@@ -79,15 +79,26 @@ node scripts/reconcile.js <TxHash>
 
 ---
 
-## ☁️ Vercel 部署
+## ☁️ Vercel 生产环境实测数据
 
-1. 在 Vercel 控制台导入该代码仓库。
-2. 配置环境变量：
-   - `PAY_TO`: 你的收款钱包公开地址
-   - `PROVIDER`: `openmeteo`（或 `amap`）
-   - `AMAP_KEY`: （可选）高德 Web 服务 API Key
-3. 部署完成后，在客户端指定公网目标即可：
-   ```powershell
-   $env:TARGET_URL = "https://你的vercel域名.vercel.app"
-   node scripts/client.js "北京"
-   ```
+- **线上服务公网根地址**：`https://x402-weather-service.vercel.app`
+- **免费健康探测端点**：`https://x402-weather-service.vercel.app/health`
+- **付费天气 API 端点**：`https://x402-weather-service.vercel.app/api/weather?city=北京`
+
+### 线上已完成的真实链上结算实录：
+1. **本地测试阶段结算 Tx**：
+   [`0x1899a7b38ebf4af00d0e6a53e89d953c53d0fb5bdea9204c27a439a3ba4f657e`](https://sepolia.basescan.org/tx/0x1899a7b38ebf4af00d0e6a53e89d953c53d0fb5bdea9204c27a439a3ba4f657e)
+2. **Vercel 公网实测阶段结算 Tx**：
+   [`0x587fd1284cbc8d49ec9ce9c31f4998001c270bd6a0492d97c1a869473cc9b352`](https://sepolia.basescan.org/tx/0x587fd1284cbc8d49ec9ce9c31f4998001c270bd6a0492d97c1a869473cc9b352)
+
+### 随时在公网复测：
+```powershell
+# 1. 探测公网 402 账单（严格安全停顿）
+$env:TARGET_URL = "https://x402-weather-service.vercel.app"; node scripts/client.js "北京"
+
+# 2. 授权自动支付 $0.001 USDC 获取天气
+$env:TARGET_URL = "https://x402-weather-service.vercel.app"; $env:CONFIRM = "yes"; node scripts/client.js "北京"
+
+# 3. 链上对账
+node scripts/reconcile.js <TxHash>
+```

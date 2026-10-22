@@ -264,7 +264,7 @@ def build_report():
         ("4. Vercel Serverless Express 路由无损还原", 
          "针对 Vercel 将请求 rewrite 到 /api/index.js 导致的路径覆盖问题，在 vercel.json 中通过 __path=/$1 携带原始请求路径与 Query，并在 Express 入口通过前置拦截器还原 req.url，完美兼容了本地运行与云端 Serverless 部署。"),
         ("5. 多层级私密钱包保护规范", 
-         "实现了私钥零硬编码。付款方私钥支持环境变量及 D:\\ZouJiancheng\\星瀚\\wallet\\wallet.json 多层级自动探测，自动规范化 0x 前缀；并在根目录和子目录双重配置 .gitignore，确保敏感资产绝不进代码库或泄露给外部平台。")
+         "实现了私钥零硬编码。付款方私钥支持环境变量及 wallet.json 多层级自动探测，自动规范化 0x 前缀；并在根目录和子目录双重配置 .gitignore，确保敏感资产绝不进代码库或泄露给外部平台。")
     ]
     for title, desc in details:
         p = doc.add_paragraph()
@@ -302,18 +302,12 @@ node scripts/reconcile.js <TxHash>""")
     r_end.font.size = Pt(10.5)
     r_end.font.color.rgb = RGBColor(31, 73, 125)
 
-    # 保存文档
-    target_path = r"D:\ZouJiancheng\星瀚\Level 1\x402付费天气API服务搭建与全链路验证报告.docx"
+    # 保存文档（自动保存至当前工程根目录）
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(current_dir, ".."))
+    target_path = os.path.join(project_root, "x402付费天气API服务搭建与全链路验证报告.docx")
     doc.save(target_path)
     print(f"Report successfully saved to: {target_path}")
-
-    # 同时复制一份到父级目录 D:\ZouJiancheng\星瀚
-    parent_path = r"D:\ZouJiancheng\星瀚\x402付费天气API服务搭建与全链路验证报告.docx"
-    try:
-        shutil.copyfile(target_path, parent_path)
-        print(f"Report copy saved to: {parent_path}")
-    except Exception as e:
-        print(f"Parent copy warning: {e}")
 
 if __name__ == "__main__":
     build_report()

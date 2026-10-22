@@ -110,7 +110,7 @@ async function run() {
   const privateKey = getPayerPrivateKey();
   if (!privateKey) {
     console.error(`❌ 未找到付款方私钥 PAYER_PRIVATE_KEY！`);
-    console.error(`👉 请在 D:\\ZouJiancheng\\星瀚\\wallet\\wallet.json 或环境变量中填入私钥后重试。`);
+    console.error(`👉 请在 wallet.json 或环境变量 PAYER_PRIVATE_KEY 中填入私钥后重试。`);
     process.exit(1);
   }
 

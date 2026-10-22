@@ -8,7 +8,11 @@ yarn-error.log*
 .env
 .env.*
 !.env.example
+wallet.json
+!wallet.example.json
 secrets/
+*.key
+*.pem
 
 # Vercel 部署临时构建产物
 .vercel

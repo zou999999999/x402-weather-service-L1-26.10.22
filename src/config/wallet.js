@@ -6,9 +6,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
 
-// 支持多个安全路径检测（优先检测父级目录 D:\ZouJiancheng\星瀚\wallet\wallet.json）
+// 支持多个安全路径检测（优先检测父级目录、工程根目录及 secrets 目录）
 const candidatePaths = [
   path.resolve(projectRoot, '../wallet/wallet.json'),
+  path.resolve(projectRoot, 'wallet.json'),
   path.resolve(projectRoot, 'secrets/wallet.json'),
   path.resolve(projectRoot, '../secrets/wallet.json')
 ];

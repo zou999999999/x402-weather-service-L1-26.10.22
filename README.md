@@ -88,17 +88,103 @@ node scripts/reconcile.js <TxHash>
 ### 线上已完成的真实链上结算实录：
 1. **本地测试阶段结算 Tx**：
    [`0x1899a7b38ebf4af00d0e6a53e89d953c53d0fb5bdea9204c27a439a3ba4f657e`](https://sepolia.basescan.org/tx/0x1899a7b38ebf4af00d0e6a53e89d953c53d0fb5bdea9204c27a439a3ba4f657e)
-2. **Vercel 公网实测阶段结算 Tx**：
+2. **Vercel 公网实测结算 Tx (北京)**：
    [`0x587fd1284cbc8d49ec9ce9c31f4998001c270bd6a0492d97c1a869473cc9b352`](https://sepolia.basescan.org/tx/0x587fd1284cbc8d49ec9ce9c31f4998001c270bd6a0492d97c1a869473cc9b352)
+3. **现场公网实测结算 Tx (深圳)**：
+   [`0x5c258d23a6e8ca252ba228f347e44cd4913327462a31d02faab8e9cc6729bacd`](https://sepolia.basescan.org/tx/0x5c258d23a6e8ca252ba228f347e44cd4913327462a31d02faab8e9cc6729bacd)
 
 ### 随时在公网复测：
 ```powershell
 # 1. 探测公网 402 账单（严格安全停顿）
-$env:TARGET_URL = "https://x402-weather-service.vercel.app"; node scripts/client.js "北京"
+$env:TARGET_URL = "https://x402-weather-service.vercel.app"; node scripts/client.js "深圳"
 
 # 2. 授权自动支付 $0.001 USDC 获取天气
-$env:TARGET_URL = "https://x402-weather-service.vercel.app"; $env:CONFIRM = "yes"; node scripts/client.js "北京"
+$env:TARGET_URL = "https://x402-weather-service.vercel.app"; $env:CONFIRM = "yes"; node scripts/client.js "深圳"
 
 # 3. 链上对账
+node scripts/reconcile.js 0x5c258d23a6e8ca252ba228f347e44cd4913327462a31d02faab8e9cc6729bacd
+```
+
+---
+
+## 🤖 AI Agent 接入与本地支付环境自主配置指南
+
+> **写给使用本仓库的开发者或接手本项目的 AI Agent**：
+> 本节为你提供完整的接入说明。按照以下步骤，即可全自动配置好本地钱包凭据、测试代币及环境变量。
+
+### 1. 了解底层结算网络与代币规范
+本服务使用 **Base Sepolia 测试网** 结算，由公共 Facilitator 代付链上 Gas，无需准备测试网 ETH！
+- **网络名称**：Base Sepolia (CAIP-2: `eip155:84532`，Chain ID: `84532`)
+- **代币类型**：Circle 官方测试网 USDC (6 位小数)
+- **代币合约**：`0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+- **单次调用费用**：`$0.001 USDC` (即 `1000 atomic units`)
+- **公共 Facilitator 网关**：`https://x402.org/facilitator`
+
+### 2. 准备钱包资产（极简领水）
+你需要准备两个钱包地址（支持任意 EVM 钱包如 MetaMask、Rabby 生成的新地址）：
+1. **收款钱包 (PayTo)**：服务端的收益接收钱包，**仅需公开地址**，不需要私钥；
+2. **付款钱包 (Payer)**：AI Agent 扣费钱包，需要**私钥**以完成 EIP-3009 链下授权签名。
+   - 打开 [Circle 官方水龙头](https://faucet.circle.com/)；
+   - 网络选择 **Base Sepolia**；
+   - 输入你的 Agent 付款钱包地址，即可免费领取 `20.0 USDC` 测试代币（足够进行 20,000 次调用）。
+
+### 3. 配置本地钱包凭据（二选一）
+
+#### 选项 A：使用配置文件（推荐，适合本地与自动化）
+复制根目录模板 `wallet.example.json` 为 `wallet.json`（该文件已被 `.gitignore` 严格忽略，绝不会被推送到 Git）：
+```json
+{
+  "description": "Base Sepolia 测试网专用钱包配置",
+  "payerAddress": "0x你的Agent付款钱包公开地址",
+  "payerPrivateKey": "0x你的Agent付款钱包私钥",
+  "payToAddress": "0x你的服务端收款钱包公开地址"
+}
+```
+> 💡 程序支持自动向上在项目根目录、`secrets/wallet.json` 或 `../wallet/wallet.json` 自动寻找并读取该配置。
+
+#### 选项 B：使用环境变量（适合 CI/CD 与无状态 Agent）
+复制 `.env.example` 为 `.env`，或在当前终端会话中直接导出：
+```powershell
+# PowerShell
+$env:PAY_TO = "0x你的服务端收款钱包公开地址"
+$env:PAYER_ADDRESS = "0x你的Agent付款钱包公开地址"
+$env:PAYER_PRIVATE_KEY = "0x你的Agent付款钱包私钥"
+```
+```bash
+# Bash
+export PAY_TO="0x你的服务端收款钱包公开地址"
+export PAYER_ADDRESS="0x你的Agent付款钱包公开地址"
+export PAYER_PRIVATE_KEY="0x你的Agent付款钱包私钥"
+```
+
+### 4. 运行全链路调用测试
+
+#### 场景 1：Agent 调用云端公网天气 API
+```powershell
+# 1. 探测 402 账单（核验金额、网络、合约、收款人，确保安全）
+$env:TARGET_URL = "https://x402-weather-service.vercel.app"
+node scripts/client.js "上海"
+
+# 2. 确认付款并取得天气数据（自动生成 EIP-3009 签名，免 Gas 结算）
+$env:CONFIRM = "yes"
+node scripts/client.js "上海"
+```
+
+#### 场景 2：本地运行自己的天气服务端并自付自测
+```powershell
+# 1. 启动本地服务端（端口 3000）
+node server.js
+# 或在 Windows 下直接双击运行 启动本地天气服务.bat
+
+# 2. 在另一个终端发起本地测试
+$env:TARGET_URL = "http://localhost:3000"
+$env:CONFIRM = "yes"
+node scripts/client.js "广州"
+```
+
+### 5. 链上对账核验
+每次调用成功后，控制台均会输出一个交易哈希（Tx Hash）。使用内置对账脚本可直连 Base Sepolia 节点进行数据不可篡改性审计：
+```powershell
 node scripts/reconcile.js <TxHash>
 ```
+脚本将输出区块高度、事件日志匹配结果以及调用前后双方钱包的实时 USDC 余额变动。

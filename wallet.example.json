@@ -1,0 +1,6 @@
+{
+  "description": "Base Sepolia 测试网专用钱包配置模板（请勿存入主网真实资产！）",
+  "payerAddress": "0x你的Agent付款钱包公开地址",
+  "payerPrivateKey": "0x你的Agent付款钱包私钥",
+  "payToAddress": "0x你的服务端收款钱包公开地址"
+}

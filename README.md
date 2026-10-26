@@ -31,6 +31,7 @@ Level 1/
 │   │   ├── config/wallet.js    # 仅读取服务端收款钱包 (getPayToAddress)
 │   │   └── providers/          # 天气数据源抽象 (Open-Meteo & 高德天气)
 │   ├── server.js               # 本地服务监听入口（端口 3000）
+│   ├── vercel.json             # 服务端独立 Vercel 部署配置
 │   ├── package.json            # 服务端专属依赖 (@x402/express, express 等)
 │   └── .env.example            # 服务端公开环境变量模板
 │
@@ -42,12 +43,14 @@ Level 1/
 │   ├── package.json            # 客户端专属依赖 (@x402/fetch, @x402/evm, viem 等)
 │   └── .env.example            # 客户端本地私钥与环境配置模板
 │
-├── api/
-│   └── index.js                # Vercel Serverless 入口（代理至 server/api/index.js）
-├── server.js                   # 根目录本地启动快捷入口（代理至 server/server.js）
-├── scripts/                    # 根目录快捷适配脚本（代理至 client/src/）
-├── vercel.json                 # Vercel 路由重写规则
-├── 启动本地天气服务.bat        # Windows 一键启动脚本
+├── archive/                    # 【过程文件与历史资料归档】
+│   ├── antigravity-x402-prompt.md # 原始任务需求 Prompt
+│   ├── x402付费天气API服务_Level1任务全流程总结报告.docx # 本地结项总结报告
+│   ├── generate_docx.py        # 本地 Word 报告生成脚本
+│   └── README.md               # 归档说明
+│
+├── vercel.json                 # 根目录 Vercel 构建配置（指向 server/api/index.js）
+├── 启动本地天气服务.bat        # Windows 一键启动脚本（运行 node server/server.js）
 ├── package.json                # Monorepo 统一工作区编排
 └── README.md
 ```

@@ -17,7 +17,7 @@ if %errorlevel% neq 0 (
 )
 
 echo 当前项目路径: %cd%
-echo 正在启动 Node.js 服务端 (server.js)...
+echo 正在启动 Node.js 服务端 (server/server.js)...
 echo.
 echo [*] 服务启动后将自动在默认浏览器中打开测试页面！
 echo [*] 若要关闭服务，请直接关闭本黑框窗口或按 Ctrl + C。
@@ -25,6 +25,6 @@ echo ========================================================
 echo.
 
 start "" "http://localhost:3000/health"
-node server.js
+node server/server.js
 
 pause

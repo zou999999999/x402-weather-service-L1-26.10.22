@@ -21,6 +21,7 @@ dist/
 
 # 本地生成的 Word 汇报与自动化辅助脚本（仅本地保留，不推送到 GitHub，保持仓库 100% 纯 JavaScript）
 *.docx
-scripts/generate_docx.py
+tools/
+scripts/
 __pycache__/
 *.pyc

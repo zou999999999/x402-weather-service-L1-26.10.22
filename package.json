@@ -1,14 +1,21 @@
 {
-  "name": "x402-weather-service",
+  "name": "x402-weather-service-monorepo",
   "version": "1.0.0",
-  "description": "x402 Paid Weather API Service on Base Sepolia",
-  "main": "api/index.js",
+  "description": "x402 Paid Weather API Service - Standardized Monorepo Architecture",
+  "main": "server/server.js",
   "type": "module",
+  "workspaces": [
+    "server",
+    "client"
+  ],
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "client": "node scripts/client.js",
-    "reconcile": "node scripts/reconcile.js"
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "server:start": "node server/server.js",
+    "client:run": "node client/src/client.js",
+    "client:reconcile": "node client/src/reconcile.js",
+    "client": "node client/src/client.js",
+    "reconcile": "node client/src/reconcile.js"
   },
   "dependencies": {
     "@x402/core": "^2.0.0",

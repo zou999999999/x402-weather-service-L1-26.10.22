@@ -1,0 +1,18 @@
+{
+  "name": "x402-weather-client",
+  "version": "1.0.0",
+  "description": "x402 Paid Weather API Client & Auditor - User / Agent Consumer Side",
+  "main": "src/client.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/client.js",
+    "client": "node src/client.js",
+    "reconcile": "node src/reconcile.js"
+  },
+  "dependencies": {
+    "@x402/evm": "^2.0.0",
+    "@x402/fetch": "^2.0.0",
+    "dotenv": "^16.4.7",
+    "viem": "^2.23.0"
+  }
+}

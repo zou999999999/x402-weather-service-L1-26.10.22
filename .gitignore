@@ -19,9 +19,8 @@ secrets/
 dist/
 .cache/
 
-# 本地生成的 Word 汇报与自动化辅助脚本（仅本地保留，不推送到 GitHub，保持仓库 100% 纯 JavaScript）
+# 本地过程文件、历史 Prompt 与总结汇报（100% 仅本地保留，严禁推送到 GitHub）
+archive/
 *.docx
-archive/*.docx
-archive/generate_docx.py
 __pycache__/
 *.pyc
